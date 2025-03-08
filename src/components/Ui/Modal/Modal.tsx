@@ -5,7 +5,7 @@ import BackDrop from "../BackDrop/BackDrop.tsx";
 import * as React from "react";
 import {closeModal, selectModalOpen} from "../../../store/slices/transactionsSlice.ts";
 import {fetchCategories} from "../../../store/thunks/categoryThunks.ts";
-import {createTransactions} from "../../../store/thunks/transactionsThunks.ts";
+import {createTransactions, fetchTransactions} from "../../../store/thunks/transactionsThunks.ts";
 
 interface Props extends React.PropsWithChildren{
     show?: boolean;
@@ -55,6 +55,7 @@ const Modal: React.FC<Props> = ({show = false, title, onClose}) => {
             amount: parseFloat(formState.amount),
             createAt: (new Date().toDateString())
         }));
+        await dispatch(fetchTransactions());
         close();
     };
 

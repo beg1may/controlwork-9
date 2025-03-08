@@ -1,6 +1,7 @@
 import {Transaction} from "../../types";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store.ts";
+import {fetchTransactions} from "../thunks/transactionsThunks.ts";
 
 interface TransactionsState {
     items: Transaction[];
@@ -15,6 +16,8 @@ const initialState: TransactionsState = {
 }
 
 export const selectModalOpen = (state: RootState) => state.transactions.modalOpen;
+export const selectTransactions = (state: RootState) => state.transactions.items;
+export const selectTotal = (state: RootState) => state.transactions.total;
 
 export const transactionsSlice = createSlice({
     name: 'transactions',
@@ -27,6 +30,13 @@ export const transactionsSlice = createSlice({
             state.modalOpen = false;
         }
     },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchTransactions.fulfilled, (state, {payload: {total, transactions}}) => {
+                state.items = transactions;
+                state.total = total;
+            })
+    }
 });
 
 export const transactionsReduser = transactionsSlice.reducer;

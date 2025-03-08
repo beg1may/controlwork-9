@@ -31,3 +31,8 @@ export interface ApiTransaction {
 export interface ApiTransactionList {
     [id: string] : ApiTransaction;
 }
+
+export interface FetchTransaction {
+    transactions: Transaction[];
+    total: number;
+}

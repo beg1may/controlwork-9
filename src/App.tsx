@@ -1,6 +1,6 @@
-import Toolbar from "./components/Toolbar/Toolbar.tsx";
 import {Route, Routes} from "react-router-dom";
 import Transactions from "./components/Transactions/Transactions.tsx";
+import Toolbar from "./components/Toolbar/Toolbar.tsx";
 
 function App() {
 

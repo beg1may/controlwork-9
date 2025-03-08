@@ -1,7 +1,7 @@
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {selectTotal, selectTransactions} from "../../store/slices/transactionsSlice.ts";
 import {useEffect} from "react";
-import {fetchTransactions} from "../../store/thunks/transactionsThunks.ts";
+import {deleteTransaction, fetchTransactions} from "../../store/thunks/transactionsThunks.ts";
 import dayjs from 'dayjs'
 
 const Transactions = () => {
@@ -12,6 +12,11 @@ const Transactions = () => {
     useEffect(() => {
         dispatch(fetchTransactions());
     }, [dispatch]);
+
+    const onDelete = async (task_id: string) => {
+        await dispatch(deleteTransaction(task_id));
+        await dispatch(fetchTransactions());
+    };
 
 
     return (
@@ -31,6 +36,12 @@ const Transactions = () => {
                                 {transaction.category.type === 'expense' ? '-' : '+'}
                                 {transaction.amount} KGS
                             </span>
+                            <button
+                                className='btn btn-warning'
+                                onClick={() => onDelete(transaction.id)}
+                            >
+                                x
+                            </button>
                         </div>
                     </div>
                 ))}

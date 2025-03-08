@@ -1,18 +1,26 @@
 import {Transaction} from "../../types";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store.ts";
-import {fetchTransactions} from "../thunks/transactionsThunks.ts";
+import {deleteTransaction, fetchTransactions} from "../thunks/transactionsThunks.ts";
 
 interface TransactionsState {
     items: Transaction[];
     total: number;
     modalOpen: boolean;
+    loadings: {
+        fetched: boolean;
+        deleted: boolean;
+    };
 }
 
 const initialState: TransactionsState = {
     items: [],
     total: 0,
     modalOpen: false,
+    loadings: {
+        fetched: false,
+        deleted: false,
+    }
 }
 
 export const selectModalOpen = (state: RootState) => state.transactions.modalOpen;
@@ -32,10 +40,27 @@ export const transactionsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchTransactions.pending, (state) => {
+                state.loadings.fetched = true;
+            })
             .addCase(fetchTransactions.fulfilled, (state, {payload: {total, transactions}}) => {
+                state.loadings.fetched = true;
                 state.items = transactions;
                 state.total = total;
             })
+            .addCase(fetchTransactions.rejected, (state) => {
+                state.loadings.fetched = false;
+            })
+
+            .addCase(deleteTransaction.pending, (state, {meta}) => {
+                state.loadings.deleted = meta.arg;
+            })
+            .addCase(deleteTransaction.fulfilled, (state) => {
+                state.loadings.deleted = false;
+            })
+            .addCase(deleteTransaction.rejected, (state) => {
+                state.loadings.deleted = false;
+            });
     }
 });
 

@@ -1,11 +1,14 @@
 import {Link} from "react-router-dom";
-import {useState} from "react";
 import Modal from "../Ui/Modal/Modal.tsx";
+import {closeModal, openModal, selectModalOpen} from "../../store/slices/transactionsSlice.ts";
+import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 
 const Toolbar = () => {
-    const [showModal, setShowModal] = useState(false);
+    const dispatch = useAppDispatch();
+    const modal = useAppSelector(selectModalOpen);
 
-    const cancel = () => setShowModal(false);
+    const open = () => dispatch(openModal());
+    const close = () => dispatch(closeModal());
 
     return (
         <>
@@ -13,7 +16,7 @@ const Toolbar = () => {
                 <div className='container'>
                     <Link to='/' className='navbar-brand'>Finance Tracker</Link>
                     <button
-                        onClick={() => setShowModal(true)}
+                        onClick={open}
                         className='btn btn-secondary'
                     >
                         Add
@@ -21,12 +24,10 @@ const Toolbar = () => {
                 </div>
             </nav>
             <Modal
-                show={showModal}
+                show={modal}
                 title="Add Expense/Income"
-                onClose={cancel}
-            >
-
-            </Modal>
+                onClose={close}
+            />
         </>
     );
 };

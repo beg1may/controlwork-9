@@ -9,7 +9,7 @@ interface TransactionsState {
     modalOpen: boolean;
     loadings: {
         fetched: boolean;
-        deleted: boolean;
+        deleted: string | boolean;
     };
 }
 
@@ -20,12 +20,14 @@ const initialState: TransactionsState = {
     loadings: {
         fetched: false,
         deleted: false,
-    }
+    },
 }
 
 export const selectModalOpen = (state: RootState) => state.transactions.modalOpen;
 export const selectTransactions = (state: RootState) => state.transactions.items;
 export const selectTotal = (state: RootState) => state.transactions.total;
+export const selectFetchingLoadings = (state: RootState) => state.transactions.loadings.fetched;
+export const selectDeleteLoadings = (state: RootState) => state.transactions.loadings.deleted;
 
 export const transactionsSlice = createSlice({
     name: 'transactions',
